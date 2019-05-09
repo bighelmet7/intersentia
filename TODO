@@ -1,0 +1,16 @@
+1.- Multiple bars to order sandwiches.
+        - Create bars
+        - Input sandwich of each bar.
+        - Input toppings availables.
+        - Shop of the day.
+        - API:
+                /bar -> all the bars.
+                /bar/<id>/sandwich -> all the sandwiches of a given id bar.
+                /bar/<id>/sandwich/<id>/ -> all sandwich information.
+                /bar/toppings
+                /bar/bread
+                /bar/order/
+2.- Orders
+        - /order/ -> all orders
+        - /order/<id>/ -> an especific order
+
