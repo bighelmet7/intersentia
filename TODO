@@ -1,6 +1,6 @@
 1.- Multiple bars to order sandwiches.
-        - Create bars
-        - Input sandwich of each bar.
+        - Create bars -> Done
+        - Input sandwich of each bar. -> Delete and update.
         - Input toppings availables.
         - Shop of the day.
         - API:
@@ -14,3 +14,12 @@
         - /order/ -> all orders
         - /order/<id>/ -> an especific order
 
+3- Users
+        - admin
+        - workers
+
+4.- Active CORS and CRSF Token.
+
+5.- Create a manage.py with args support.
+
+6.- Production mode.
