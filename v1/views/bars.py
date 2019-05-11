@@ -6,8 +6,13 @@ from bar.models import Sandwich
 from v1.fields.bar import bar_fields
 from v1.fields.bar import sandwich_fields
 
+# INFO: only one sandwiches per employee.
+
 # TODO: 
-# same standarize the parser pattern. https://flask-restful.readthedocs.io/en/latest/reqparse.html#parser-inheritance
+# standarize the parser pattern. https://flask-restful.readthedocs.io/en/latest/reqparse.html#parser-inheritance
+# add_argument accepts a parameter append, that concates the url-x-form values
+# in the same key {'key': ['v1', 'v2', 'v3']}.
+
 
 class BarParserMixin(object):
 
@@ -63,7 +68,6 @@ class SandwichParserMixin(object):
     def _parse_args(self):
         # FIX: creates a new parser for every new request.
         parser = reqparse.RequestParser()
-        parser.add_argument('name')
         parser.add_argument('price')
         return parser.parse_args()
 
@@ -77,7 +81,7 @@ class SandwichList(SandwichParserMixin, Resource):
         bar = self.query({'id': bar_id})
         if not bar:
             return '', status.HTTP_404_NOT_FOUND
-        return bar.sandwiches, status.HTTP_200_OK
+        return bar.sandwiches.all(), status.HTTP_200_OK
 
     @marshal_with(sandwich_fields)
     def post(self, bar_id):
@@ -92,3 +96,40 @@ class SandwichList(SandwichParserMixin, Resource):
         return sandwich, status.HTTP_201_CREATED
         
 
+class SandwichDetail(SandwichParserMixin, Resource):
+
+    query = lambda obj, q: Bar.query.filter_by(**q).first()
+
+    @marshal_with(sandwich_fields)
+    def get(self, bar_id, sandwich_id):
+        bar = self.query({'id': bar_id})
+        if not bar:
+            return '', status.HTTP_404_NOT_FOUND
+        sandwich = bar.sandwiches.filter(Sandwich.id==sandwich_id).one()
+        if not sandwich:
+            return '', status.HTTP_404_NOT_FOUND
+        return sandwich, status.HTTP_200_OK
+
+    @marshal_with(sandwich_fields)
+    def put(self, bar_id, sandwich_id):
+        bar = self.query({'id': bar_id})
+        if not bar:
+            return '', status.HTTP_404_NOT_FOUND
+        sandwich = bar.sandwiches.filter(Sandwich.id==sandwich_id).one()
+        if not sandwich:
+            return '', status.HTTP_404_NOT_FOUND
+        args = self._parse_args()
+        # INFO: only the price is editable.
+        sandwich.update(**args)
+        return sandwich, status.HTTP_202_ACCEPTED
+
+    @marshal_with(sandwich_fields)
+    def delete(self, bar_id, sandwich_id):
+        bar = self.query({'id': bar_id})
+        if not bar:
+            return '', status.HTTP_404_NOT_FOUND
+        sandwich = bar.sandwiches.filter(Sandwich.id==sandwich_id).one()
+        if not sandwich:
+            return '', status.HTTP_404_NOT_FOUND
+        sandwich.delete()
+        return '', status.HTTP_200_OK
