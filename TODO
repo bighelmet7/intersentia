@@ -1,13 +1,12 @@
 1.- Multiple bars to order sandwiches.
         - Create bars -> Done
         - Input sandwich of each bar. -> Done
-        - Input toppings availables.
+        - Input toppings availables. -> Done
         - Shop of the day.
         - API:
                 /bar -> all the bars.
                 /bar/<id>/sandwich -> all the sandwiches of a given id bar.
-                /bar/<id>/sandwich/<id>/ -> all sandwich information.
-                /bar/toppings
+                /bar/<id>/sandwich/<id>/toppings/ -> all toppings availables in specific sandwich.
                 /bar/bread
                 /bar/order/
 2.- Orders
@@ -17,6 +16,8 @@
 3- Users
         - admin
         - workers
+
+        /users -> {is_manager: True, is_admin: False}
 
 4.- Active CORS and CRSF Token.
 
