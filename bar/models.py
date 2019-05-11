@@ -23,6 +23,7 @@ class Bar(Model):
     sandwiches = db.relationship('Sandwich', secondary=bar_sandwiches, lazy='dynamic',
         backref=db.backref('bars', lazy='dynamic'),
     )
+    # is_shop_day = db.Column(db.Boolean)
 
     @validates('email')
     def validates_email(self, key, email):
@@ -50,6 +51,12 @@ class Bar(Model):
         return u'<Bar %d: %s>' % (self.id, self.name)
 
 
+sandwiches_toppings = db.Table('sandwiches_toppings', db.Model.metadata,
+    db.Column('sandwich_id', db.Integer, db.ForeignKey('sandwiches.id'), primary_key=True),
+    db.Column('topping_id', db.Integer, db.ForeignKey('toppings.id'), primary_key=True),
+)
+
+
 class Sandwich(Model):
 
     __tablename__ = 'sandwiches'
@@ -57,6 +64,21 @@ class Sandwich(Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), unique=True, nullable=False)
     price = db.Column(db.Float(precision=2), nullable=False)
+    toppings = db.relationship('Topping', secondary=sandwiches_toppings, 
+        lazy='dynamic', backref=db.backref('sandwiches', lazy='dynamic'),
+    )
 
     def __repr__(self):
         return u'<Sandwich %d: %s>' % (self.id, self.name)
+
+
+class Topping(Model):
+
+    __tablename__ = 'toppings'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256), unique=True, nullable=False)
+    price = db.Column(db.Float(precision=2), nullable=False)
+
+    def __repr__(self):
+        return u'<Topping %d: %s>' % (self.id, self.name)
