@@ -20,8 +20,8 @@ class Bar(Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), unique=True, nullable=False)
     email = db.Column(db.String(256), unique=True, nullable=False)
-    sandwiches = db.relationship('Sandwich', secondary=bar_sandwiches,
-        backref=db.backref('bars', lazy=True),
+    sandwiches = db.relationship('Sandwich', secondary=bar_sandwiches, lazy='dynamic',
+        backref=db.backref('bars', lazy='dynamic'),
     )
 
     @validates('email')
@@ -55,7 +55,7 @@ class Sandwich(Model):
     __tablename__ = 'sandwiches'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256), nullable=False)
+    name = db.Column(db.String(256), unique=True, nullable=False)
     price = db.Column(db.Float(precision=2), nullable=False)
 
     def __repr__(self):
