@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import ShopDay from './ShopDay';
 import Bars from './Bars';
+import Users from './Users';
 import Sandwiches from './Sandwiches';
 import NavBar from './NavBar';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
@@ -30,6 +31,7 @@ class App extends React.Component {
           <Route path="/shop-day/" component={ShopDay} />
           <Route path="/bars/" component={Bars} />
           <Route path="/sandwiches/" component={Sandwiches} />
+          <Route path="/users/" component={Users} />
         </Router>
       </div>
     );
