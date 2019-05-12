@@ -1,5 +1,5 @@
 *.pyc
 *.txt
-node_modules/
+static/node_modules/
 *.lock
 *.log
