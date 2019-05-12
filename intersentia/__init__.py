@@ -4,7 +4,11 @@ def create_app(config_obj='intersentia.config.DevelopmentConfig'):
     """
     Returns an app Flask object configurated with the given config_obj.
     """
-    app = Flask(__name__)
+    # TODO: avoid hardcoded paths.
+    app = Flask(__name__,
+        static_folder='../static/dist',
+        template_folder='../static/public'
+    )
     app.config.from_object(config_obj)
 
     from extensions import db
@@ -17,5 +21,8 @@ def create_app(config_obj='intersentia.config.DevelopmentConfig'):
 
     from v1.blueprint import api_bp
     app.register_blueprint(api_bp, url_prefix='/api')
+
+    from flask_cors import CORS
+    CORS(app)
 
     return app
