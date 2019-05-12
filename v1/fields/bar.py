@@ -17,5 +17,6 @@ bar_fields = {
     'id': fields.Integer,
     'name': fields.String,
     'email': fields.String,
+    'is_shop_day': fields.Boolean,
     'sandwiches': fields.List(fields.Nested(sandwich_fields)),
 }

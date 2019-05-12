@@ -1,5 +1,5 @@
 from flask_api import status
-from flask_restful import Resource, marshal_with, reqparse
+from flask_restful import Resource, marshal_with
 from sqlalchemy.orm.exc import NoResultFound
 
 from bar.models import Bar
@@ -8,8 +8,7 @@ from bar.models import Topping
 from v1.fields.bar import bar_fields
 from v1.fields.bar import sandwich_fields
 from v1.fields.bar import toppings_fields
-
-# INFO: only one sandwiches per employee.
+from v1.resources.parser import ParserMixin
 
 # TODO: 
 # standarize the parser pattern. https://flask-restful.readthedocs.io/en/latest/reqparse.html#parser-inheritance
@@ -18,17 +17,8 @@ from v1.fields.bar import toppings_fields
 # slipt these doc into 3 files: bar, sandwich and topping.
 # Create a QueryManager object to handle all the Queries.
 
-class BarParserMixin(object):
 
-    def _parse_args(self, *args):
-        # FIX: should not call this in every single request.
-        parser = reqparse.RequestParser()
-        for arg in args:
-            parser.add_argument(arg)
-        return parser.parse_args()
-
-
-class BarList(BarParserMixin, Resource):
+class BarList(ParserMixin, Resource):
 
     @marshal_with(bar_fields)
     def get(self):
@@ -37,12 +27,12 @@ class BarList(BarParserMixin, Resource):
 
     @marshal_with(bar_fields)
     def post(self):
-        args = self._parse_args('name', 'email')
+        args = self._parse_args(('name', str), ('email', str))
         bar_result = Bar.create(**args)
         return bar_result, status.HTTP_201_CREATED
 
 
-class BarDetail(BarParserMixin, Resource):
+class BarDetail(ParserMixin, Resource):
 
     query = lambda obj, q: Bar.query.filter_by(**q).first()
 
@@ -56,7 +46,7 @@ class BarDetail(BarParserMixin, Resource):
         bar = self.query({'id': id})
         if not bar:
             return '', status.HTTP_404_NOT_FOUND
-        args = self._parse_args('name', 'email')
+        args = self._parse_args(('name', str), ('email', str), ('is_shop_day', bool))
         bar.update(**args)
         return bar, status.HTTP_202_ACCEPTED
 
@@ -67,17 +57,7 @@ class BarDetail(BarParserMixin, Resource):
         return '', status.HTTP_200_OK
 
 
-class SandwichParserMixin(object):
-
-    def _parse_args(self, *args):
-        # FIX: creates a new parser for every new request.
-        parser = reqparse.RequestParser()
-        for arg in args:
-            parser.add_argument(arg)
-        return parser.parse_args()
-
-
-class SandwichList(SandwichParserMixin, Resource):
+class SandwichList(ParserMixin, Resource):
 
     query = lambda obj, q: Bar.query.filter_by(**q).first()
 
@@ -93,7 +73,7 @@ class SandwichList(SandwichParserMixin, Resource):
         bar = self.query({'id': bar_id})
         if not bar:
             return [], status.HTTP_404_NOT_FOUND
-        args = self._parse_args('name', 'price')
+        args = self._parse_args(('name', str), ('price', str))
         sandwich = Sandwich.create(**args)
         bar.sandwiches.append(sandwich)
         # FIX: this is not atomic. ACID issues could appear.
@@ -101,7 +81,7 @@ class SandwichList(SandwichParserMixin, Resource):
         return sandwich, status.HTTP_201_CREATED
         
 
-class SandwichDetail(SandwichParserMixin, Resource):
+class SandwichDetail(ParserMixin, Resource):
 
     query = lambda obj, q: Bar.query.filter_by(**q).first()
 
@@ -125,7 +105,7 @@ class SandwichDetail(SandwichParserMixin, Resource):
             sandwich = bar.sandwiches.filter(Sandwich.id==sandwich_id).one()
         except NoResultFound:
             return '', status.HTTP_404_NOT_FOUND
-        args = self._parse_args('name', 'price')
+        args = self._parse_args(('name', str), ('price', str))
         sandwich.update(**args)
         return sandwich, status.HTTP_202_ACCEPTED
 
@@ -142,17 +122,7 @@ class SandwichDetail(SandwichParserMixin, Resource):
         return '', status.HTTP_200_OK
 
 
-class ToppingParserMixin(object):
-
-    def _parse_args(self, *args):
-        # FIX: creates a new parser for every new request.
-        parser = reqparse.RequestParser()
-        for arg in args:
-            parser.add_argument(arg)
-        return parser.parse_args()
-
-
-class ToppingList(ToppingParserMixin, Resource):
+class ToppingList(ParserMixin, Resource):
 
     query = lambda obj, q: Bar.query.filter_by(**q).first()
 
@@ -172,7 +142,7 @@ class ToppingList(ToppingParserMixin, Resource):
         bar = self.query({'id': bar_id})
         if not bar:
             return [], status.HTTP_404_NOT_FOUND
-        args = self._parse_args('name', 'price')
+        args = self._parse_args(('name', str), ('price', str))
         try:
             sandwich = bar.sandwiches.filter(Sandwich.id==sandwich_id).one()
         except NoResultFound:
@@ -184,7 +154,7 @@ class ToppingList(ToppingParserMixin, Resource):
         return topping, status.HTTP_201_CREATED
         
 
-class ToppingDetail(ToppingParserMixin, Resource):
+class ToppingDetail(ParserMixin, Resource):
 
     query = lambda obj, q: Bar.query.filter_by(**q).first()
 
@@ -198,7 +168,7 @@ class ToppingDetail(ToppingParserMixin, Resource):
             sandwich = bar.sandwiches.filter(Sandwich.id==sandwich_id).one()
         except NoResultFound:
             return '', status.HTTP_404_NOT_FOUND
-        args = self._parse_args('price')
+        args = self._parse_args(('price', str))
         try:
             topping = sandwich.toppings.filter(Topping.id==topping_id).one()
         except NoResultFound:
