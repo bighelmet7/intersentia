@@ -23,7 +23,7 @@ class Bar(Model):
     sandwiches = db.relationship('Sandwich', secondary=bar_sandwiches, lazy='dynamic',
         backref=db.backref('bars', lazy='dynamic'),
     )
-    # is_shop_day = db.Column(db.Boolean)
+    is_shop_day = db.Column(db.Boolean, default=False)
 
     @validates('email')
     def validates_email(self, key, email):
