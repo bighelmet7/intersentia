@@ -24,6 +24,7 @@
     "babel-loader": "^8.0.5",
     "babel-preset-es2015": "^6.24.1",
     "date-fns": "2.0.0-alpha.27",
+    "material-table": "^1.36.1",
     "material-ui-pickers": "^2.2.4",
     "mson": "^1.3.1",
     "mson-react": "^1.3.0",

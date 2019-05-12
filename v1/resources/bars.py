@@ -56,8 +56,7 @@ class BarDetail(BarParserMixin, Resource):
         bar = self.query({'id': id})
         if not bar:
             return '', status.HTTP_404_NOT_FOUND
-        # INFO: name its not editable.
-        args = self._parse_args('email')
+        args = self._parse_args('name', 'email')
         bar.update(**args)
         return bar, status.HTTP_202_ACCEPTED
 
@@ -86,14 +85,14 @@ class SandwichList(SandwichParserMixin, Resource):
     def get(self, bar_id):
         bar = self.query({'id': bar_id})
         if not bar:
-            return '', status.HTTP_404_NOT_FOUND
+            return [], status.HTTP_404_NOT_FOUND
         return bar.sandwiches.all(), status.HTTP_200_OK
 
     @marshal_with(sandwich_fields)
     def post(self, bar_id):
         bar = self.query({'id': bar_id})
         if not bar:
-            return '', status.HTTP_404_NOT_FOUND
+            return [], status.HTTP_404_NOT_FOUND
         args = self._parse_args('name', 'price')
         sandwich = Sandwich.create(**args)
         bar.sandwiches.append(sandwich)
@@ -126,8 +125,7 @@ class SandwichDetail(SandwichParserMixin, Resource):
             sandwich = bar.sandwiches.filter(Sandwich.id==sandwich_id).one()
         except NoResultFound:
             return '', status.HTTP_404_NOT_FOUND
-        args = self._parse_args('price')
-        # INFO: only the price is editable.
+        args = self._parse_args('name', 'price')
         sandwich.update(**args)
         return sandwich, status.HTTP_202_ACCEPTED
 
@@ -162,23 +160,23 @@ class ToppingList(ToppingParserMixin, Resource):
     def get(self, bar_id, sandwich_id):
         bar = self.query({'id': bar_id})
         if not bar:
-            return '', status.HTTP_404_NOT_FOUND
+            return [], status.HTTP_404_NOT_FOUND
         try:
             sandwich = bar.sandwiches.filter(Sandwich.id==sandwich_id).one()
         except NoResultFound:
-            return '', status.HTTP_404_NOT_FOUND
+            return [], status.HTTP_404_NOT_FOUND
         return sandwich.toppings.all(), status.HTTP_200_OK
 
     @marshal_with(toppings_fields)
     def post(self, bar_id, sandwich_id):
         bar = self.query({'id': bar_id})
         if not bar:
-            return '', status.HTTP_404_NOT_FOUND
+            return [], status.HTTP_404_NOT_FOUND
         args = self._parse_args('name', 'price')
         try:
             sandwich = bar.sandwiches.filter(Sandwich.id==sandwich_id).one()
         except NoResultFound:
-            return '', status.HTTP_404_NOT_FOUND
+            return [], status.HTTP_404_NOT_FOUND
         topping = Topping.create(**args)
         sandwich.toppings.append(topping)
         # FIX: this is not atomic. ACID issues could appear.

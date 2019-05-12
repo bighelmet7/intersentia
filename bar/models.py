@@ -62,7 +62,7 @@ class Sandwich(Model):
     __tablename__ = 'sandwiches'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256), unique=True, nullable=False)
+    name = db.Column(db.String(256), nullable=False)
     price = db.Column(db.Float(precision=2), nullable=False)
     toppings = db.relationship('Topping', secondary=sandwiches_toppings, 
         lazy='dynamic', backref=db.backref('sandwiches', lazy='dynamic'),
@@ -77,7 +77,7 @@ class Topping(Model):
     __tablename__ = 'toppings'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256), unique=True, nullable=False)
+    name = db.Column(db.String(256), nullable=False)
     price = db.Column(db.Float(precision=2), nullable=False)
 
     def __repr__(self):
