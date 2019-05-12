@@ -17,12 +17,12 @@
         - admin
         - workers
 
-        /users -> {is_manager: True, is_admin: False}
+        /users -> {is_manager: True, is_admin: False} -> Done
 
-4.- Active CORS and CRSF Token.
+4.- Active CORS and CRSF Token. -> Done
 
 5.- Create a manage.py with args support.
 
 6.- Production mode.
 
-7.- Front intersentia.
+7.- Front intersentia. -> Done
