@@ -45,13 +45,16 @@ class ShopDay extends React.Component {
         }
     }
 
+    // TODO: Added filter parameters to the URL ?is_shop_day=true, instead of
+    // doing the searching here.
     componentDidMount() {
-        let url = '/api/v1/bars/1/sandwiches/';
+        let url = '/api/v1/bars/';
         fetch(url)
         .then(response => response.json())
         .then(
             (result) => {
-                this.setState({isLoaded: true, data: result});
+                let shopDay = result.filter(bar => bar['is_shop_day'] == true)
+                this.setState({isLoaded: true, data: shopDay});
             },
             (err) => {
                 this.setState({isLoaded: false, err: err});
@@ -88,15 +91,17 @@ class ShopDay extends React.Component {
                             </TableRow>
                             </TableHead>
                             <TableBody>
-                            {data.map(n => {
+                            {data.map((bar, i) => {
                                 return (
-                                    <TableRow key={n.id}>
-                                    <TableCell component="th" scope="row">
-                                        {n.name}
-                                    </TableCell>
-                                    <TableCell align="right">{`${n.price} €`}</TableCell>
-                                    <TableCell align="right">{this.renderObj(n.toppings)}</TableCell>
-                                    </TableRow>
+                                    bar.sandwiches.map((sandwich, j) => (
+                                        <TableRow key={`bar_${i}_${j}`}>
+                                        <TableCell component="th" scope="row">
+                                            {sandwich.name}
+                                        </TableCell>
+                                        <TableCell align="right">{`${sandwich.price} €`}</TableCell>
+                                        <TableCell align="right">{this.renderObj(sandwich.toppings)}</TableCell>
+                                        </TableRow>
+                                    ))
                                 );
                             })}
                             </TableBody>
