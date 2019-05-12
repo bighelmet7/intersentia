@@ -6,35 +6,44 @@ import ListSubheader from '@material-ui/core/ListSubheader';
 import FastFoodIcon from '@material-ui/icons/Fastfood';
 import RestaurantIcon from '@material-ui/icons/Restaurant';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import GroupIcon from '@material-ui/icons/Group';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import { Link } from "react-router-dom";
+import { NavLink as Nav } from 'react-router-dom';
 
 export const mainListItems = (
   <div>
-    <ListItem button>
-      <ListItemIcon>
-          <ShoppingCartIcon />
-      </ListItemIcon>
-        <Link to="/shop-day">
+    <Nav to="/shop-day/">
+      <ListItem button>
+        <ListItemIcon>
+            <ShoppingCartIcon />
+        </ListItemIcon>
           <ListItemText primary="Shop Day" />
-        </Link>
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-          <RestaurantIcon />
-      </ListItemIcon>
-        <Link to="/bars">
+      </ListItem>
+    </Nav>
+    <Nav to="/bars/">
+      <ListItem button>
+        <ListItemIcon>
+            <RestaurantIcon />
+        </ListItemIcon>
           <ListItemText primary="Bars" />
-        </Link>
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <FastFoodIcon />
-      </ListItemIcon>
-        <Link to="/sandwiches">
+      </ListItem>
+    </Nav>
+    <Nav to="/sandwiches/">
+      <ListItem button>
+        <ListItemIcon>
+          <FastFoodIcon />
+        </ListItemIcon>
           <ListItemText primary="Sandwiches" />
-        </Link>
-    </ListItem>
+      </ListItem>
+    </Nav>
+    <Nav to="/users/">
+      <ListItem button>
+        <ListItemIcon>
+          <GroupIcon />
+        </ListItemIcon>
+          <ListItemText primary="Users" />
+      </ListItem>
+    </Nav>
   </div>
 );
 
