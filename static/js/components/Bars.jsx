@@ -35,6 +35,7 @@ class Bars extends React.Component {
       columns: [
         { title: 'Name', field: 'name' },
         { title: 'Email', field: 'email' },
+        { title: 'Shop Day', field: 'is_shop_day', type: 'boolean'},
       ],
       data: [],
       isLoaded: false,
@@ -93,10 +94,11 @@ class Bars extends React.Component {
   }
 
   handleUpdate = (newData, oldData) => {
-    let url = '/api/v1/bars/' + updateData.id + '/';
+    let url = '/api/v1/bars/' + oldData.id + '/';
     let params = {
-      name: updateData.name,
-      email: updateData.email,
+      name: newData.name,
+      email: newData.email,
+      'is_shop_day': newData['is_shop_day'] ? true : '' 
     };
     const searchParams = Object.keys(params).map((key) => {
       return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
