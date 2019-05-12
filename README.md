@@ -43,6 +43,7 @@ TODO
 * API filtering by parameters.
 * Swagger api with flask swagger for a more pretty documentation.
 * manage.py for the Flask app.
+* API testing.
 
 Concept
 --------
@@ -94,7 +95,10 @@ src/
     └── resources
 ```
 
-intersentia has the main core functionalities as extensions, config, database
+- intersentia has the main core functionalities as extensions, config, database, exceptions and the local database.
+- bar, v1 and user are some of the apps.
+- static contains all the frontend logics.
+- migrations its a flask migrate stuff.
 
 API
 ---
@@ -110,8 +114,13 @@ Available endpoints:
 - /api/v1/users/<user:id>
 
 
+Testing
+-------
+
+In the bar/tests/ directory we can find a simple template of a database mock with factory_boy using the SQLAlchemy system. The main idea it is to create a mock database that handles gracefully our models and then all its remove automatically.
+
+
 Problems
 --------
 
 In most of the source code are TODO, INFO and FIX comments that scopes the problem. But the main and truely problem was the time, because of my degree and my current work tasks blocks me for going further.
-
