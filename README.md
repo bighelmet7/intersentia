@@ -1,6 +1,10 @@
 Sandwich ordering
 =================
 
+![alt text](https://github.com/bighelmet7/intersentia/blob/master/sandwich_order.png "Main dashboard")
+
+
+
 Requirements
 ------------
 
